@@ -40,13 +40,13 @@ Csig = [0.1,3.5]
 bounds = [Cmu, Csig]
 
 optim = opentrons.Optimizer(xt, yt, bounds, 
-                            savedir = '../data2/', batch_size=4)
+                            savedir = './data/', batch_size=4)
 
 
 optim.save()
-C0 = np.load('../data2/0/new_x.npy')
-sim.process_batch(C0, '../data2/0.xlsx')
-optim.update('../data2/0.xlsx')
+C0 = np.load('./data/0/new_x.npy')
+sim.process_batch(C0, './data/0.xlsx')
+optim.update('./data/0.xlsx')
 optim.save()
 
 
@@ -55,22 +55,22 @@ for i in range(1,2):
     optim.suggest_next()
     optim.save()
     # simulate iteration i new_x 
-    Ci = np.load('../data2/%d/new_x.npy'%i)
-    sim.process_batch(Ci, '../data2/%d.xlsx'%i)
-    optim.update('../data2/%d.xlsx'%i)
+    Ci = np.load('./data/%d/new_x.npy'%i)
+    sim.process_batch(Ci, './data/%d.xlsx'%i)
+    optim.update('./data/%d.xlsx'%i)
     optim.save()
 
 
-train_obj = np.load('../data2/1/train_obj.npy')
+train_obj = np.load('./data/1/train_obj.npy')
 assert train_obj.shape == (8,1), 'Train_obj does not have the correct size'
 assert train_obj.any() > 0, 'Train_obj has positive numbers' 
 
 
-new_x = np.load('../data2/1/new_x.npy')
+new_x = np.load('./data/1/new_x.npy')
 assert new_x.shape == (4,2), 'new_x does not have the correct size'
 assert new_x[:,0].any() < Cmu[1] or new_x[:,0].any() > Cmu[0], 'guesses are out of bounds'
 assert new_x[:,1].any() < Csig[1] or new_x[:,1].any() > Csig[0], 'guesses are out of bounds'
 
 
-shutil.rmtree('../data2')
+shutil.rmtree('./data')
 
